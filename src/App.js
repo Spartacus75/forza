@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+//import React from 'react'
+//import './App.css';
+import MyAppBar from'./Components/MyAppBar'
+//import Presentation from './Components/Presentation'
+//import Pricing from './Components/Pricing'
+//import Services from './Components/Services'
+//import SignUp from './Components/SignUp'
+//import SignIn from './Components/SignIn'
+//import ForgotPassword from './Components/ForgotPassword'
+import Login from './Components/Login'
+import Main from './Components/Main'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  //Link
+} from "react-router-dom";
+//import myApp from './firebase.js'
+//import {AuthProvider} from "./Context/AuthContext"
+//import PrivateRoute from './Assets/PrivateRoute'
 
 function App() {
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+<>
+
+{/*  <AuthProvider>*/}
+
+      <Router>
+
+        <MyAppBar/>
+
+        <Switch>
+              <Route exact path="/" component={Login}/>
+              <Route path="/main" component={Main}/>
+{/*              <Route path="/services" component={Services}/>
+              <Route path="/signin" component={SignIn}/>
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/forgotpassword" component={ForgotPassword}/>
+              <PrivateRoute path="/myprofile" component={MyProfile}/>*/}
+        </Switch>
+
+      </Router>
+
+{/*  </AuthProvider>*/}
+</>
   );
 }
 
-export default App;
+export default App
