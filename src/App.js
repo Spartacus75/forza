@@ -9,6 +9,7 @@ import MyAppBar from'./Components/MyAppBar'
 //import ForgotPassword from './Components/ForgotPassword'
 import Login from './Components/Login'
 import Main from './Components/Main'
+import ForgotPassword from './Components/ForgotPassword'
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,17 +17,20 @@ import {
   //Link
 } from "react-router-dom";
 //import myApp from './firebase.js'
-//import {AuthProvider} from "./Context/AuthContext"
+import {AuthProvider} from "./Context/AuthContext"
 //import PrivateRoute from './Assets/PrivateRoute'
+import firebase from './firebase.js'
 
 function App() {
 
+console.log('ici')
+console.log('firebase', firebase)
 
 
   return (
 <>
 
-{/*  <AuthProvider>*/}
+  <AuthProvider>
 
       <Router>
 
@@ -35,6 +39,7 @@ function App() {
         <Switch>
               <Route exact path="/" component={Login}/>
               <Route path="/main" component={Main}/>
+              <Route path="/forgotpassword" component={ForgotPassword}/>
 {/*              <Route path="/services" component={Services}/>
               <Route path="/signin" component={SignIn}/>
               <Route path="/signup" component={SignUp}/>
@@ -44,7 +49,7 @@ function App() {
 
       </Router>
 
-{/*  </AuthProvider>*/}
+  </AuthProvider>
 </>
   );
 }

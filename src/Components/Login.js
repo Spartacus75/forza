@@ -1,8 +1,9 @@
 import React, {useRef, useState} from 'react'
 import {Card, Form, Button, Alert} from 'react-bootstrap'
 import "bootstrap/dist/css/bootstrap.min.css"
-//import {useAuth} from '../Context/AuthContext'
+import {useAuth} from '../Context/AuthContext'
 import {Link, useHistory} from 'react-router-dom'
+
 //import {useTranslation} from 'react-i18next'
 /*import {
   FacebookLoginButton,
@@ -10,6 +11,7 @@ import {Link, useHistory} from 'react-router-dom'
 } from "react-social-login-buttons";*/
 
 export default function Login(){
+
 
 const styles = {
       signinCSS: {
@@ -29,13 +31,13 @@ const styles = {
 const emailRef = useRef()
 const passwordRef = useRef()
 
-//const {login, signupGoogle, currentUser} = useAuth()
-const [error, setError] =useState('')
-//const [loading, setLoading] = useState (false)
-//const history = useHistory()
+const {login, currentUser} = useAuth()
+const [error, setError] = useState('')
+const [loading, setLoading] = useState (false)
+const history = useHistory()
 //const {t} = useTranslation()
 
-/*
+
 async function handleSubmit(e){
         e.preventDefault()
 
@@ -44,33 +46,16 @@ async function handleSubmit(e){
           setLoading(true)
           await login(emailRef.current.value, passwordRef.current.value)
           //history.push("/")
-          history.push('/services')
+          history.push('/main')
         } catch {
           setError('Failed to log in')
                 }
           setLoading(false)
 }
 
-async function handleSubmitGoogle(){
 
-  try {
-    setError('')
-    setLoading(true)
-    await signupGoogle()
-    history.push('/services')
-  } catch {
 
-    setError('Failed to connect with your Google Account!')
-          }
-    setLoading(false)
-
-}
-
-async function handleSubmitFacebook(){
-  alert('fonction à faire...')
-}
-
-*/
+  console.log('login', currentUser)
 
   return (
     <>
@@ -84,7 +69,7 @@ async function handleSubmitFacebook(){
           <h2 className="text-center mb-4">Please fill the required fields</h2>
 
           {error && <Alert variant="danger">{error}</Alert>}
-          <Form /*onSubmit={handleSubmit}*/>
+          <Form onSubmit={handleSubmit}>
           <Form.Group id="email">
             <Form.Label>Email</Form.Label>
             <Form.Control type="email" ref={emailRef} required/>
@@ -93,6 +78,10 @@ async function handleSubmitFacebook(){
             <Form.Label>Password</Form.Label>
             <Form.Control type="password" ref={passwordRef} required/>
           </Form.Group>
+          <Button disabled={loading} className="w-100" type="submit">
+            Login
+            </Button>
+
           </Form>
           <div className="w-100 text-center mt-2">
             <Link to="/forgotpassword">Password forgotten?</Link>

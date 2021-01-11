@@ -12,6 +12,8 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import logo from '../Images/Logo.png'
+import {useAuth} from '../Context/AuthContext'
+import {useHistory} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +33,9 @@ export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
+  const {logout} = useAuth()
+  const history = useHistory()
+
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
@@ -42,6 +47,12 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogOut = async () => {
+    await logout()
+    history.push('/')
+  }
+
 
   return (
     <div className={classes.root}>
@@ -77,7 +88,7 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
 
               </Menu>
             </div>
