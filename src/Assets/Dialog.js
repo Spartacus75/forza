@@ -80,7 +80,8 @@ export default function FormDialog({
   dataStatus,
   labelComments,
   valueComments,
-  onChangeComments
+  onChangeComments,
+  children
 
 
 }) {
@@ -98,6 +99,10 @@ const styles ={
   },
   textField: {
     width: '100%'
+  },
+  date:{
+    display: 'flex',
+    width: 'auto'
   }
 }
 
@@ -112,6 +117,14 @@ const styles ={
           </DialogContentText>
 
 <div style={styles.mandatory}>
+
+<br/>
+          <Typography  variant="overline" display="block" gutterBottom>
+          MANDATORY FIELDS
+          </Typography>
+
+
+
           {/*PROJECT NAME*/}
           <TextField
             autoFocus
@@ -203,6 +216,9 @@ THE FOLLOWING FIELDS ARE NOT MANDATORY TO A PROJECT
             onChange={onChangeClient}
             style={styles.textField}
           />
+
+
+          <div style={styles.date}>
           {/*OI DATE*/}
           <OrderIntakeDate
             labelDatePicker={labelOI}
@@ -215,6 +231,9 @@ THE FOLLOWING FIELDS ARE NOT MANDATORY TO A PROJECT
             valueDatePicker={valueKO}
             onChangeDatePicker={onChangeKO}
           />
+          </div>
+
+
           {/*ROAD SURVEY*/}
           <QuantitySelect
               label={labelRS}
@@ -257,6 +276,8 @@ THE FOLLOWING FIELDS ARE NOT MANDATORY TO A PROJECT
           />
 
 </div>
+<br/>
+{children}
 
         </DialogContent>
 
@@ -268,8 +289,11 @@ THE FOLLOWING FIELDS ARE NOT MANDATORY TO A PROJECT
           <Button onClick={onClick} color="primary">
             {buttonConfirmLabel}
           </Button>
+
         </DialogActions>
       </Dialog>
+
+
     </div>
   );
 }

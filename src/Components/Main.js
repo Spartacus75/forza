@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useAuth} from '../Context/AuthContext'
 import Filter from './Filter'
 import List from './List'
@@ -19,10 +19,17 @@ import {
   tenderStatus
 } from '../data.js'
 import moment from 'moment'
+import firebase from '../firebase.js'
+import SmallAlert from '../Assets/SmallAlert'
 
 
 export default function Main(){
 
+const styles = {
+  alert:{
+    backgroundColor: '#f6b3b3'
+  }
+}
 
 const {currentUser} = useAuth()
 
@@ -44,6 +51,8 @@ const [valueLOG, setValueLOG] = useState('')
 const [valueGate, setValueGate] = useState('')
 const [valueStatus, setValueStatus] = useState('')
 const [valueComments, setValueComments] = useState('')
+const [valueValidation, setValueValidation] =useState(false)
+const [valueFirestore, setvalueFirestore] = useState([])
 
 
 const onClickAddProject = () => {
@@ -55,8 +64,75 @@ const handleClose = () => {
   setOpen(false)
 }
 
-const onClickRecordProject = () => {
-  console.log('on enregistre le projet sur Firebase...')
+const onClickRecordProject = async () => {
+
+if (
+  valueProject !== '' &&
+  valueCountry !== '' &&
+  valueQtty !== '' &&
+  valueGeneration !== '' &&
+  valueBlade !== '' &&
+  valueTower !== '' &&
+  valuePriority !== ''
+)
+
+{
+
+              await firebase.firestore().collection('Projects').doc(`${valueProject}-${moment().unix()}`).set({
+                project: valueProject,
+                country: valueCountry,
+                quantity: valueQtty,
+                generation: valueGeneration,
+                blade: valueBlade,
+                tower: valueTower,
+                tm: valueTM,
+                sm: valueSM,
+                client: valueClient,
+                priority: valuePriority,
+                dateOI: moment(valueOrderIntake).unix(),
+                dateKO: moment(valueKO).unix(),
+                roadSurvey: valueRS,
+                logBudget: valueLOG,
+                gate: valueGate,
+                status: valueStatus,
+                comments: valueComments
+              })
+              .then(function() {
+                console.log("Document successfully written!");
+                setOpen(false)
+                setValueProject('')
+                setValueCountry('')
+                setValueQtty('')
+                setValueGeneration('')
+                setValueBlade('')
+                setValueTower('')
+                setValuePriority('')
+                setValueTM('')
+                setValueSM('')
+                setValueClient('')
+                setValuePriority('')
+                setValueOrderIntake(Date.now())
+                setValueKO(Date.now())
+                setValueRS('')
+                setValueLOG('')
+                setValueGate('')
+                setValueStatus('')
+                setValueComments('')
+                setValueValidation(false)
+              })
+              .catch(function(error) {
+                console.error("Error writing document: ", error);
+
+
+
+            });
+
+            } else {
+              console.log('All the fields to be filled!')
+              setValueValidation(true)
+            }
+
+
 }
 
 const onChangeProjectValue = (event) => {
@@ -139,6 +215,12 @@ const onChangeComments = (event) => {
   setValueComments(event.target.value)
 }
 
+const onClickValidation = () => {
+  setValueValidation(false)
+}
+
+
+
 var newProject = {
   project: valueProject,
   country: valueCountry,
@@ -160,12 +242,43 @@ var newProject = {
 
 }
 
-console.log('new project', newProject)
+//ON RECUPERE LE TABLEA DE DONNEES SUR firestore
+useEffect(() => {
+
+  async function fetchData(){
+
+    var projects = [];
+
+    await firebase.firestore().collection("Projects")
+      .onSnapshot(function(querySnapshot) {
+
+          querySnapshot.forEach(function(doc) {
+              //console.log('objet à pousser', doc.data())
+              projects.push(doc.data());
+              //console.log('new objet', projects)
+
+          });
+          setvalueFirestore(projects)
+          //console.log("Current project in CA: ", projects.join(", "));
+      });
+      //console.log('on récupère ça', projects)
+      //return projects
+
+  }
+
+   fetchData()
+   //await console.log('table', table)
+
+}, [])
+
+console.log('firestore Project',valueFirestore)
+//console.log(valueFirestore)
+
 
   return (
     <>
 
-    <div>MAIN COMPONENT</div>
+      <div>MAIN COMPONENT</div>
     <Filter/>
     <AddProjectButton
         label="Add a project"
@@ -264,7 +377,17 @@ console.log('new project', newProject)
         onChangeComments={onChangeComments}
         labelComments='Comments'
 
+        children={
+
+          valueValidation && <p style={styles.alert}>All mandatory fields to filled</p>
+
+
+        }
+
+
     />
+
+
 
     </>
   )
