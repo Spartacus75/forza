@@ -21,6 +21,7 @@ import {
 import moment from 'moment'
 import firebase from '../firebase.js'
 import SmallAlert from '../Assets/SmallAlert'
+import {findWithAttr} from '../functions.js'
 
 
 export default function Main(){
@@ -34,16 +35,16 @@ const styles = {
 const {currentUser} = useAuth()
 
 const [open, setOpen] = useState(false)
-const [valueProject, setValueProject] = useState('')
-const [valueCountry, setValueCountry] = useState('')
-const [valueQtty, setValueQtty] = useState('')
-const [valueGeneration, setValueGeneration] = useState(0)
-const [valueBlade, setValueBlade] = useState('')
-const [valueTower, setValueTower] = useState('')
+const [valueProject, setValueProject] = useState(Date.now())
+const [valueCountry, setValueCountry] = useState('France')
+const [valueQtty, setValueQtty] = useState(3)
+const [valueGeneration, setValueGeneration] = useState('Delta')
+const [valueBlade, setValueBlade] = useState('N117')
+const [valueTower, setValueTower] = useState('TS91')
 const [valueTM, setValueTM] = useState('')
 const [valueSM, setValueSM] = useState('')
 const [valueClient, setValueClient] = useState('')
-const [valuePriority, setValuePriority] = useState('')
+const [valuePriority, setValuePriority] = useState('Medium')
 const [valueOrderIntake, setValueOrderIntake] = useState(Date.now())
 const [valueKO, setValueKO] = useState(Date.now())
 const [valueRS, setValueRS] = useState('')
@@ -100,17 +101,17 @@ if (
               .then(function() {
                 console.log("Document successfully written!");
                 setOpen(false)
-                setValueProject('')
-                setValueCountry('')
-                setValueQtty('')
-                setValueGeneration('')
-                setValueBlade('')
-                setValueTower('')
-                setValuePriority('')
+                setValueProject(Date.now())
+                setValueCountry('France')
+                setValueQtty('15')
+                setValueGeneration('Delta')
+                setValueBlade('N117')
+                setValueTower('TS91')
+                setValuePriority('Medium')
                 setValueTM('')
                 setValueSM('')
                 setValueClient('')
-                setValuePriority('')
+                //setValuePriority('')
                 setValueOrderIntake(Date.now())
                 setValueKO(Date.now())
                 setValueRS('')
@@ -119,6 +120,7 @@ if (
                 setValueStatus('')
                 setValueComments('')
                 setValueValidation(false)
+                //setvalueFirestore([...valueFirestore])//ajout ok?
               })
               .catch(function(error) {
                 console.error("Error writing document: ", error);
@@ -249,25 +251,46 @@ useEffect(() => {
 
     var projects = [];
 
-    await firebase.firestore().collection("Projects")
-      .onSnapshot(function(querySnapshot) {
+    await firebase.firestore()
+                  .collection("Projects")
+                  .onSnapshot(function(snapshot) {
 
-          querySnapshot.forEach(function(doc) {
-              //console.log('objet à pousser', doc.data())
-              projects.push(doc.data());
-              //console.log('new objet', projects)
 
-          });
-          setvalueFirestore(projects)
-          //console.log("Current project in CA: ", projects.join(", "));
-      });
-      //console.log('on récupère ça', projects)
-      //return projects
+                                                  snapshot.docChanges().forEach(function(change) {
+
+                                                                                                  //console.log('change',change)
+
+                                                                                                  if (change.type === "added") {
+
+                                                                                                          projects.push(change.doc.data());
+
+                                                                                                  }
+
+                                                                                                  if (change.type === "modified") {
+                                                                                                          console.log("Modified project: ", change.doc.data());
+                                                                                                  }
+
+                                                                                                  if (change.type === "removed") {
+                                                                                                          console.log("Removed project: ", change.doc.data());
+                                                                                                          var temp = change.doc.data().project
+                                                                                                          //console.log('nom du projet', temp)
+                                                                                                          console.log('index', findWithAttr(projects, 'project', temp))
+                                                                                                          projects.splice(findWithAttr(projects, 'project', temp), 1)
+                                                                                                          console.log('projects après removed', projects)
+
+                                                                                                          }
+
+                                                                                                });
+                                                  console.log('A LA FIN', projects)
+                                                  setvalueFirestore(projects)
+                                                  console.log('state is...', valueFirestore)
+
+                                              });
+
 
   }
 
    fetchData()
-   //await console.log('table', table)
 
 }, [])
 
@@ -285,7 +308,9 @@ console.log('firestore Project',valueFirestore)
         onClick={onClickAddProject}
 
     />
-    <List/>
+    <List
+    tableau={valueFirestore}
+    />
 
     {currentUser? currentUser.email : 'not loggedin'}
 

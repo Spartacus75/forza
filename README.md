@@ -1,3 +1,6 @@
 - filtre des dates à régler
 - génération d'un email après réunion
 - Possibilité d'export
+- Après s'être assurer que le tri marche correctement, mettre de la mise en page puis attaquer le filtrage (avec le bouton)
+- optional: dashboard
+- indiquer la météo et le classement du foot

@@ -22,6 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import Hidden from '@material-ui/core/Hidden';
 import moment from 'moment'
+import firebase from '../firebase.js'
 
 
 
@@ -29,15 +30,18 @@ import moment from 'moment'
 
 
 //CREATION DES DONNEES
+/*
 function createData(name, qtty_1, blade_1, tower_1, generation, client, priority, country, order_intake, kickoff, TM, SM, RS, logBudget, gateStatus, comments, status) {
   return { name, qtty_1, blade_1, tower_1, generation, client, priority, country, order_intake, kickoff, TM, SM, RS, logBudget, gateStatus, comments, status};
 }
+*/
 
+/*
 const rows = [
   createData('Craco', 10, 'N131', 'TS114', 'Delta', 'Margherita', 'High', 'Italy', moment('2020/11/30').format('X'), moment('2019/10/03').format('X'), 'H. Del Fabbro', 'G. Celliberti', 'yes', 'yes', 'Gate4', 'handover done fdsfdsf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g sf fdsgf gfdggg gg g ', 'closed' ),
   createData('San Carlo', 2, 'N131', 'TS84', 'Delta', 'Margherita', 'Low', 'Italy', moment('2020/03/01').format('X'), moment('2020/05/05').format('X'), 'H. Del Fabbro', 'G. Celliberti', 'yes', 'no', 'Gate3', 'handover done', 'open'),
   createData('Kella', 9, 'N149', 'TS105', 'Delta 4000', 'Motor Oil Hellas', 'Medium','Greece', moment('2020/12/15').format('X'), moment('2018/02/08').format('X'), 'M. Seduk', 'P. Lappas', 'no', 'yes', 'Gate3', 'handover done', 'open')
-/*  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
   createData('Gingerbread', 356, 16.0, 49, 3.9),
   createData('Honeycomb', 408, 3.2, 87, 6.5),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
@@ -46,8 +50,9 @@ const rows = [
   createData('Lollipop', 392, 0.2, 98, 0.0),
   createData('Marshmallow', 318, 0, 81, 2.0),
   createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),*/
-];
+  createData('Oreo', 437, 18.0, 63, 4.0)
+];*/
+
 
 //FONCTION POUR LE TRI EN GENERAL
 
@@ -62,6 +67,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
+  //console.log(orderBy)
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -84,7 +90,7 @@ const headCells = [
   { id: 'qtty_1', numeric: true, disablePadding: false, label: 'Qtty (1)' },
   { id: 'blade_1', numeric: true, disablePadding: false, label: 'Blade (1)' },
   { id: 'tower_1', numeric: true, disablePadding: false, label: 'Tower (1)' },
-  { id: 'generation', numeric: true, disablePadding: false, label: 'Generation' },
+  { id: 'generation', numeric: true, disablePadding: false, label: 'Generation ' },
   { id: 'client', numeric: true, disablePadding: false, label: 'Client' },
   { id: 'priority', numeric: true, disablePadding: false, label: 'Priority' },
   { id: 'country', numeric: true, disablePadding: false, label: 'Country' },
@@ -105,8 +111,16 @@ const headCells = [
 function EnhancedTableHead(props) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
+    console.log(event, property)
     onRequestSort(event, property);
+
   };
+
+  const styles ={
+    titre:{
+      fontWeight: 'bold'
+    }
+  }
 
   return (
     <TableHead>
@@ -130,6 +144,7 @@ function EnhancedTableHead(props) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              style={styles.titre}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -179,7 +194,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, onClickSelection } = props;
 
   return (
     <Toolbar
@@ -200,7 +215,7 @@ const EnhancedTableToolbar = (props) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
-            <DeleteIcon />
+            <DeleteIcon onClick={onClickSelection} />
           </IconButton>
         </Tooltip>
       ) : (
@@ -244,14 +259,14 @@ const useStyles = makeStyles((theme) => ({
 
 //FONCTION PRINCIPALE
 
-export default function EnhancedTable() {
+export default function EnhancedTable({tableau}) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('qtty_1');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -261,7 +276,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = tableau.map((n) => n.project);
       setSelected(newSelecteds);
       return;
     }
@@ -269,6 +284,10 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event, name) => {
+
+//console.log('event', event)
+//console.log('name', name)
+
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -303,12 +322,43 @@ export default function EnhancedTable() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, tableau.length - page * rowsPerPage);
+
+
+  const onClickSelection = () => {
+    //console.log('dans la fonction', selected)
+    //ici on supprime les projets selectionnés
+
+    selected.forEach(item => {
+
+
+
+      console.log('on va supprimer ', item)
+
+      var myQuery = firebase.firestore().collection("Projects").where("project", "==", item)
+
+      myQuery.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          doc.ref.delete();
+
+
+
+    setSelected([])
+  });
+});
+
+
+
+    })
+
+  }
+
+  //console.log('selection', selected)
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} onClickSelection={onClickSelection} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -323,23 +373,23 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={tableau.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(tableau, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.project);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.project)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={index}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -349,25 +399,25 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                        {row.project}
                       </TableCell>
-                      <TableCell align="right">{row.qtty_1}</TableCell>
-                      <TableCell align="right">{row.blade_1}</TableCell>
-                      <TableCell align="right">{row.tower_1}</TableCell>
+                      <TableCell align="right">{row.quantity}</TableCell>
+                      <TableCell align="right">{row.blade}</TableCell>
+                      <TableCell align="right">{row.tower}</TableCell>
                       <TableCell align="right">{row.generation}</TableCell>
 
                       <TableCell align="right">{row.client}</TableCell>
 
                       <TableCell align="right">{row.priority}</TableCell>
                       <TableCell align="right">{row.country}</TableCell>
-                      <TableCell align="right">{moment.unix(row.order_intake).format("MM/DD/YYYY")}</TableCell>
+                      <TableCell align="right">{moment.unix(row.dateOI).format("MM/DD/YYYY")}</TableCell>
 
-                      <TableCell align="right">{moment.unix(row.kickoff).format("MM/DD/YYYY")}</TableCell>
-                      <TableCell align="right">{row.TM}</TableCell>
-                      <TableCell align="right">{row.SM}</TableCell>
-                      <TableCell align="right">{row.RS}</TableCell>
+                      <TableCell align="right">{moment.unix(row.dateKO).format("MM/DD/YYYY")}</TableCell>
+                      <TableCell align="right">{row.tm}</TableCell>
+                      <TableCell align="right">{row.sm}</TableCell>
+                      <TableCell align="right">{row.roadSurvey}</TableCell>
                       <TableCell align="right">{row.logBudget}</TableCell>
-                      <TableCell align="right">{row.gateStatus}</TableCell>
+                      <TableCell align="right">{row.gate}</TableCell>
                       <TableCell align="right" style={{width: 300}}>{row.comments}</TableCell>
                       <TableCell align="right">{row.status}</TableCell>
 
@@ -385,7 +435,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={tableau.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
