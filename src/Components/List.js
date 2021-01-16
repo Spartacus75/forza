@@ -262,7 +262,15 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable({
 
   tableau,
-  onClickQtty
+  onClickQtty,
+  onClickBlade,
+  onClickTower,
+  onClickGeneration,
+  onClickPriority,
+  onClickCountry,
+  onClickTM,
+  onClickSM,
+  onClickRoad
 
 
 }) {
@@ -412,20 +420,20 @@ export default function EnhancedTable({
                         {row.project}
                       </TableCell>
                       <TableCell align="right" onClick={()=>onClickQtty(row.project)} hover >{row.quantity}</TableCell>
-                      <TableCell align="right">{row.blade}</TableCell>
-                      <TableCell align="right">{row.tower}</TableCell>
-                      <TableCell align="right">{row.generation}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickBlade(row.project)}>{row.blade}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickTower(row.project)}>{row.tower}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickGeneration(row.project)}>{row.generation}</TableCell>
 
                       <TableCell align="right">{row.client}</TableCell>
 
-                      <TableCell align="right">{row.priority}</TableCell>
-                      <TableCell align="right">{row.country}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickPriority(row.project)} >{row.priority}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickCountry(row.project)} >{row.country}</TableCell>
                       <TableCell align="right">{moment.unix(row.dateOI).format("MM/DD/YYYY")}</TableCell>
 
                       <TableCell align="right">{moment.unix(row.dateKO).format("MM/DD/YYYY")}</TableCell>
-                      <TableCell align="right">{row.tm}</TableCell>
-                      <TableCell align="right">{row.sm}</TableCell>
-                      <TableCell align="right">{row.roadSurvey}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickTM(row.project)}>{row.tm}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickSM(row.project)}>{row.sm}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickRoad(row.project)}>{row.roadSurvey}</TableCell>
                       <TableCell align="right">{row.logBudget}</TableCell>
                       <TableCell align="right">{row.gate}</TableCell>
                       <TableCell align="right" style={{width: 300}}>{row.comments}</TableCell>
