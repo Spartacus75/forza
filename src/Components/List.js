@@ -259,7 +259,13 @@ const useStyles = makeStyles((theme) => ({
 
 //FONCTION PRINCIPALE
 
-export default function EnhancedTable({tableau}) {
+export default function EnhancedTable({
+
+  tableau,
+  onClickQtty
+
+
+}) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
@@ -267,6 +273,9 @@ export default function EnhancedTable({tableau}) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -353,7 +362,7 @@ export default function EnhancedTable({tableau}) {
 
   }
 
-  //console.log('selection', selected)
+
 
   return (
     <div className={classes.root}>
@@ -385,7 +394,7 @@ export default function EnhancedTable({tableau}) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.project)}
+                      //onClick={(event) => handleClick(event, row.project)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -394,6 +403,7 @@ export default function EnhancedTable({tableau}) {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
+                          onClick={(event) => handleClick(event, row.project)}
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
@@ -401,7 +411,7 @@ export default function EnhancedTable({tableau}) {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.project}
                       </TableCell>
-                      <TableCell align="right">{row.quantity}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickQtty(row.project)} hover >{row.quantity}</TableCell>
                       <TableCell align="right">{row.blade}</TableCell>
                       <TableCell align="right">{row.tower}</TableCell>
                       <TableCell align="right">{row.generation}</TableCell>

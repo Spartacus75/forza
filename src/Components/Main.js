@@ -22,6 +22,10 @@ import moment from 'moment'
 import firebase from '../firebase.js'
 import SmallAlert from '../Assets/SmallAlert'
 import {findWithAttr} from '../functions.js'
+import ModalQtty from '../Assets/DialogForChange/DialogQtty'
+import ModalBlade from '../Assets/DialogForChange/DialogQtty'
+import SelectQtty from '../Assets/Select'
+import {qttydata} from '../data.js'
 
 
 export default function Main(){
@@ -54,6 +58,9 @@ const [valueStatus, setValueStatus] = useState('')
 const [valueComments, setValueComments] = useState('')
 const [valueValidation, setValueValidation] =useState(false)
 const [valueFirestore, setvalueFirestore] = useState([])
+const [valueModalQtty, setValueModalQtty] = useState(false)
+const [valueQttyChange, setValueQttyChange] = useState(1)
+const [valueProjectChange, setValueProjectChange] = useState('')
 
 
 const onClickAddProject = () => {
@@ -79,7 +86,7 @@ if (
 
 {
 
-              await firebase.firestore().collection('Projects').doc(`${valueProject}-${moment().unix()}`).set({
+              await firebase.firestore().collection('Projects').doc(`${valueProject}`).set({
                 project: valueProject,
                 country: valueCountry,
                 quantity: valueQtty,
@@ -222,6 +229,50 @@ const onClickValidation = () => {
 }
 
 
+const onClickQtty = (event) => {
+  //alert('on affiche le modal')
+  setValueModalQtty(true)
+  setValueProjectChange(event)
+  console.log('project name: ', event)
+
+}
+
+const handleCloseQtty = () => {
+  setValueModalQtty(false)
+}
+
+const onChangeDialogQtty = (event) => {
+  setValueQttyChange(event.target.value)
+}
+
+const handleValidateQtty = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            quantity: valueQttyChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalQtty(false)
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalQtty(false)
+});
+
+
+
+}
+
+
 
 var newProject = {
   project: valueProject,
@@ -267,7 +318,20 @@ useEffect(() => {
                                                                                                   }
 
                                                                                                   if (change.type === "modified") {
-                                                                                                          console.log("Modified project: ", change.doc.data());
+                                                                                                          console.log("Modified project: ", change.doc.data())
+
+                                                                                                          //ici on doit modifier intelligemment le tableu de project....
+                                                                                                          //projects.push(change.doc.data());
+                                                                                                          //on va supprimer l'élémént du tableau en cours qui a été modifié
+                                                                                                          var temp = change.doc.data().project
+                                                                                                          console.log('index', findWithAttr(projects, 'project', temp))
+                                                                                                          projects.splice(findWithAttr(projects, 'project', temp), 1, change.doc.data())
+                                                                                                          console.log('projects après update', projects)
+                                                                                                          //on va ajouter la nouvelle valeur (change.doc.data) à la même position
+
+
+
+                                                                                                          console.log('dans le modified', projects)
                                                                                                   }
 
                                                                                                   if (change.type === "removed") {
@@ -282,7 +346,7 @@ useEffect(() => {
 
                                                                                                 });
                                                   console.log('A LA FIN', projects)
-                                                  setvalueFirestore(projects)
+                                                  setvalueFirestore(projects, console.log('mis à jour! longueur est de: ', projects.length))
                                                   console.log('state is...', valueFirestore)
 
                                               });
@@ -294,8 +358,9 @@ useEffect(() => {
 
 }, [])
 
-console.log('firestore Project',valueFirestore)
-//console.log(valueFirestore)
+//console.log('firestore Project',valueFirestore)
+
+
 
 
   return (
@@ -309,7 +374,8 @@ console.log('firestore Project',valueFirestore)
 
     />
     <List
-    tableau={valueFirestore}
+          tableau={valueFirestore}
+          onClickQtty={(event) => onClickQtty(event)}
     />
 
     {currentUser? currentUser.email : 'not loggedin'}
@@ -412,6 +478,26 @@ console.log('firestore Project',valueFirestore)
 
     />
 
+
+    {valueModalQtty &&
+      <ModalQtty
+        open={valueModalQtty}
+        handleClose={handleCloseQtty}
+        titleDialog='Change WTG quantity'
+        dialogText='Pick a quantity'
+        labelValidate='Update'
+        handleValidate={handleValidateQtty}
+        children={
+          <SelectQtty
+              label='Quantity'
+              value={valueQttyChange}
+              onChange={onChangeDialogQtty}
+              data={dataQtty}
+          />
+        }
+
+        />
+    }
 
 
     </>
