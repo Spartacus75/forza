@@ -270,8 +270,10 @@ export default function EnhancedTable({
   onClickCountry,
   onClickTM,
   onClickSM,
-  onClickRoad
-
+  onClickRoad,
+  onClickLOGBudget,
+  onClickGate,
+  onClickStatus
 
 }) {
   const classes = useStyles();
@@ -431,13 +433,13 @@ export default function EnhancedTable({
                       <TableCell align="right">{moment.unix(row.dateOI).format("MM/DD/YYYY")}</TableCell>
 
                       <TableCell align="right">{moment.unix(row.dateKO).format("MM/DD/YYYY")}</TableCell>
-                      <TableCell align="right"  onClick={()=>onClickTM(row.project)}>{row.tm}</TableCell>
-                      <TableCell align="right"  onClick={()=>onClickSM(row.project)}>{row.sm}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickTM(row.project)}>{row.tm}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickSM(row.project)}>{row.sm}</TableCell>
                       <TableCell align="right" onClick={()=>onClickRoad(row.project)}>{row.roadSurvey}</TableCell>
-                      <TableCell align="right">{row.logBudget}</TableCell>
-                      <TableCell align="right">{row.gate}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickLOGBudget(row.project)}>{row.logBudget}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickGate(row.project)}>{row.gate}</TableCell>
                       <TableCell align="right" style={{width: 300}}>{row.comments}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickStatus(row.project)}>{row.status}</TableCell>
 
                     </TableRow>
                   );

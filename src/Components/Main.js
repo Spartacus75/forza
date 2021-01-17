@@ -31,6 +31,9 @@ import ModalCountry from '../Assets/DialogForChange/DialogQtty'
 import ModalTM from '../Assets/DialogForChange/DialogQtty'
 import ModalSM from '../Assets/DialogForChange/DialogQtty'
 import ModalRoad from '../Assets/DialogForChange/DialogQtty'
+import ModalLOGBudget from '../Assets/DialogForChange/DialogQtty'
+import ModalGate from '../Assets/DialogForChange/DialogQtty'
+import ModalStatus from '../Assets/DialogForChange/DialogQtty'
 import SelectQtty from '../Assets/Select'
 
 
@@ -84,7 +87,12 @@ const [valueModalSM, setValueModalSM] = useState(false)
 const [valueSMChange, setValueSMChange] = useState('')
 const [valueModalRoad, setValueModalRoad] = useState(false)
 const [valueRoadChange, setValueRoadChange] = useState('')
-
+const [valueModalLOGBudget, setValueModalLOGBudget] = useState(false)
+const [valueLOGBudgetChange, setValueLOGBudgetChange] = useState('')
+const [valueModalGate, setValueModalGate] = useState(false)
+const [valueGateChange, setValueGateChange] = useState('')
+const [valueModalStatus, setValueModalStatus] = useState(false)
+const [valueStatusChange, setValueStatusChange] = useState('')
 
 
 const onClickAddProject = () => {
@@ -661,6 +669,143 @@ const handleValidateRoad = async (event) => {
 
 }
 
+//LOG Budget
+
+const onClickLOGBudget = (event) => {
+  //alert('on affiche le modal')
+  setValueModalLOGBudget(true)
+  setValueProjectChange(event)
+  console.log('project name: ', event)
+
+}
+
+const handleCloseLOGBudget = () => {
+  setValueModalLOGBudget(false)
+}
+
+const onChangeDialogLOGBudget = (event) => {
+  setValueLOGBudgetChange(event.target.value)
+}
+
+const handleValidateLOGBudget = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            logBudget: valueLOGBudgetChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalLOGBudget(false)
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalLOGBudget(false)
+});
+
+
+
+}
+
+//GATE
+
+const onClickGate = (event) => {
+  //alert('on affiche le modal')
+  setValueModalGate(true)
+  setValueProjectChange(event)
+  console.log('project name: ', event)
+
+}
+
+const handleCloseGate = () => {
+  setValueModalGate(false)
+}
+
+const onChangeDialogGate = (event) => {
+  setValueGateChange(event.target.value)
+}
+
+const handleValidateGate = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            gate: valueGateChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalGate(false)
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalGate(false)
+});
+
+
+
+}
+
+//STATUS
+
+const onClickStatus = (event) => {
+  //alert('on affiche le modal')
+  setValueModalStatus(true)
+  setValueProjectChange(event)
+  console.log('project name: ', event)
+
+}
+
+const handleCloseStatus = () => {
+  setValueModalStatus(false)
+}
+
+const onChangeDialogStatus = (event) => {
+  setValueStatusChange(event.target.value)
+}
+
+const handleValidateStatus = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            status: valueStatusChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalStatus(false)
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalStatus(false)
+});
+
+
+
+}
+
+
+
 
 
 var newProject = {
@@ -773,6 +918,9 @@ useEffect(() => {
           onClickTM={(event) => onClickTM(event)}
           onClickSM={(event) => onClickSM(event)}
           onClickRoad={(event) => onClickRoad(event)}
+          onClickLOGBudget={(event) => onClickLOGBudget(event)}
+          onClickGate={(event) => onClickGate(event)}
+          onClickStatus={(event) => onClickStatus(event)}
     />
 
     {currentUser? currentUser.email : 'not loggedin'}
@@ -1065,6 +1213,74 @@ useEffect(() => {
 
         />
     }
+
+
+{/*LOG BUDGET*/}
+    {valueModalLOGBudget &&
+      <ModalLOGBudget
+        open={valueModalLOGBudget}
+        handleClose={handleCloseLOGBudget}
+        titleDialog='Change the status for LOG Budget'
+        dialogText='Pick a status for LOG Budget'
+        labelValidate='Update'
+        handleValidate={handleValidateLOGBudget}
+        children={
+          <SelectQtty
+              label='LOG Budget Status'
+              value={valueLOGBudgetChange}
+              onChange={onChangeDialogLOGBudget}
+              data={dataLOGBudget}
+          />
+        }
+
+        />
+    }
+
+
+{/*GATE*/}
+    {valueModalGate &&
+      <ModalGate
+        open={valueModalGate}
+        handleClose={handleCloseGate}
+        titleDialog='Change the Gate Status'
+        dialogText='Pick a Gate status'
+        labelValidate='Update'
+        handleValidate={handleValidateGate}
+        children={
+          <SelectQtty
+              label='Gate Status'
+              value={valueGateChange}
+              onChange={onChangeDialogGate}
+              data={dataGate}
+          />
+        }
+
+        />
+    }
+
+
+{/*STATUS*/}
+    {valueModalStatus &&
+      <ModalStatus
+        open={valueModalStatus}
+        handleClose={handleCloseStatus}
+        titleDialog='Change the Project Status'
+        dialogText='Pick a Project status'
+        labelValidate='Update'
+        handleValidate={handleValidateStatus}
+        children={
+          <SelectQtty
+              label='Project Status'
+              value={valueProjectChange}
+              onChange={onChangeDialogStatus}
+              data={tenderStatus}
+          />
+        }
+
+        />
+    }
+
+
 
 
     </>
