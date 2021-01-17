@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useAuth} from '../Context/AuthContext'
+import TextField from '@material-ui/core/TextField';
 import Filter from './Filter'
 import List from './List'
 import AddProjectButton from '../Assets/Button'
@@ -34,7 +35,11 @@ import ModalRoad from '../Assets/DialogForChange/DialogQtty'
 import ModalLOGBudget from '../Assets/DialogForChange/DialogQtty'
 import ModalGate from '../Assets/DialogForChange/DialogQtty'
 import ModalStatus from '../Assets/DialogForChange/DialogQtty'
+import ModalClient from '../Assets/DialogForChange/DialogQtty'
+import ModalComments from '../Assets/DialogForChange/DialogQtty'
+import ModalKO from '../Assets/DialogForChange/DialogQtty'
 import SelectQtty from '../Assets/Select'
+import DatePicker from '../Assets/DatePicker'
 
 
 
@@ -93,7 +98,12 @@ const [valueModalGate, setValueModalGate] = useState(false)
 const [valueGateChange, setValueGateChange] = useState('')
 const [valueModalStatus, setValueModalStatus] = useState(false)
 const [valueStatusChange, setValueStatusChange] = useState('')
-
+const [valueModalClient, setValueModalClient] = useState(false)
+const [valueClientChange, setValueClientChange] = useState('')
+const [valueModalComments, setValueModalComments] = useState(false)
+const [valueCommentsChange, setValueCommentsChange] = useState('')
+const [valueModalKO, setValueModalKO] = useState(false)
+const [valueKOChange, setValueKOChange] = useState(moment(Date.now()).format('x'))
 
 const onClickAddProject = () => {
   setOpen(true)
@@ -129,8 +139,8 @@ if (
                 sm: valueSM,
                 client: valueClient,
                 priority: valuePriority,
-                dateOI: moment(valueOrderIntake).unix(),
-                dateKO: moment(valueKO).unix(),
+                dateOI: valueOrderIntake/*moment(valueOrderIntake).unix()*/,
+                dateKO: valueKO/*moment(valueKO).unix()*/,
                 roadSurvey: valueRS,
                 logBudget: valueLOG,
                 gate: valueGate,
@@ -804,6 +814,158 @@ const handleValidateStatus = async (event) => {
 
 }
 
+//CLIENT
+
+const onClickClient = (event) => {
+  //alert('on affiche le modal')
+  setValueModalClient(true)
+  setValueProjectChange(event)
+  console.log('project name: ', event)
+
+}
+
+const handleCloseClient = () => {
+  setValueModalClient(false)
+}
+
+const onChangeDialogClient = (event) => {
+  setValueClientChange(event.target.value)
+}
+
+const handleValidateClient = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            client: valueClientChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalClient(false)
+            setValueClientChange('')
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalClient(false)
+});
+
+
+
+}
+
+//COMMENTS
+
+
+const onClickComments = (event, comments) => {
+  //alert('on affiche le modal')
+  setValueCommentsChange(comments)
+  setValueModalComments(true)
+  setValueProjectChange(event)
+  //console.log('project name: ', event)
+  //console.log('comments: ', comments)
+
+}
+
+const handleCloseComments = () => {
+  setValueModalComments(false)
+}
+
+const onChangeDialogComments = (event) => {
+  setValueCommentsChange(event.target.value)
+}
+
+const handleValidateComments = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            comments: valueCommentsChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalComments(false)
+            setValueCommentsChange('')
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalComments(false)
+});
+
+
+
+}
+
+
+//KICK-OFF
+
+const onClickKO = async (event, date) => {
+  //alert('on affiche le modal')
+  console.log('date qui vient de firestore', date) //timestamp => OK => on la converti en dates
+  console.log('on convertit le TS en date classique', moment.unix(date).format("D/MM/yyyy"))
+  setValueKOChange(date)
+
+  setValueModalKO(true)
+  setValueProjectChange(event)
+  //console.log('project name: ', event)
+  //console.log('date: ', moment.unix(date).format("DD/MM/yyyy"))
+  //console.log('new date: ', valueKOChange)
+  //console.log('convert to timestamp', moment(valueKOChange).format("x"))
+}
+
+const handleCloseKO = () => {
+  setValueModalKO(false)
+}
+
+const onChangeDialogKO = (event) => {
+  //console.log('AVANT HEIN!', event)
+  //console.log('HEIN!!!! ', moment.unix(event).format("DD/MM/yyyy"))
+  console.log('date brute du picker', event)
+  console.log('date converti en timestamp', moment.unix(event). format('D/MM/yyyy'))
+  setValueKOChange( '17/01/2025'/*moment.unix(event/1000). format('D/MM/yyyy')*/)
+}
+
+const handleValidateKO = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+  console.log(valueKOChange)
+  console.log('valeur pour firestore', moment(moment(valueKOChange)).format("X"))
+  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
+  //console.log('dans la procédure',event)
+  //console.log('new qtty', valueQttyChange)
+  //console.log('projet qui va être modifié: ', valueProjectChange )
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            dateKO:  valueKOChange
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalKO(false)
+            //setValueKOChange('')
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalKO(false)
+});
+
+
+
+}
 
 
 
@@ -852,20 +1014,20 @@ useEffect(() => {
                                                                                                   }
 
                                                                                                   if (change.type === "modified") {
-                                                                                                          console.log("Modified project: ", change.doc.data())
+                                                                                                          //console.log("Modified project: ", change.doc.data())
 
                                                                                                           //ici on doit modifier intelligemment le tableu de project....
                                                                                                           //projects.push(change.doc.data());
                                                                                                           //on va supprimer l'élémént du tableau en cours qui a été modifié
                                                                                                           var temp = change.doc.data().project
-                                                                                                          console.log('index', findWithAttr(projects, 'project', temp))
+                                                                                                          //console.log('index', findWithAttr(projects, 'project', temp))
                                                                                                           projects.splice(findWithAttr(projects, 'project', temp), 1, change.doc.data())
-                                                                                                          console.log('projects après update', projects)
+                                                                                                          //console.log('projects après update', projects)
                                                                                                           //on va ajouter la nouvelle valeur (change.doc.data) à la même position
 
 
 
-                                                                                                          console.log('dans le modified', projects)
+                                                                                                          //console.log('dans le modified', projects)
                                                                                                   }
 
                                                                                                   if (change.type === "removed") {
@@ -879,9 +1041,9 @@ useEffect(() => {
                                                                                                           }
 
                                                                                                 });
-                                                  console.log('A LA FIN', projects)
+                                                  //console.log('A LA FIN', projects)
                                                   setvalueFirestore(projects, console.log('mis à jour! longueur est de: ', projects.length))
-                                                  console.log('state is...', valueFirestore)
+                                                  //console.log('state is...', valueFirestore)
 
                                               });
 
@@ -921,6 +1083,9 @@ useEffect(() => {
           onClickLOGBudget={(event) => onClickLOGBudget(event)}
           onClickGate={(event) => onClickGate(event)}
           onClickStatus={(event) => onClickStatus(event)}
+          onClickClient={(event) => onClickClient(event)}
+          onClickComments={(event, comments) => onClickComments(event, comments)}
+          onClickKO={(event, date) => onClickKO(event, date)}
     />
 
     {currentUser? currentUser.email : 'not loggedin'}
@@ -1280,6 +1445,77 @@ useEffect(() => {
         />
     }
 
+{/*CLIENT*/}
+    {valueModalClient &&
+      <ModalClient
+        open={valueModalClient}
+        handleClose={handleCloseClient}
+        titleDialog='Change the Client'
+        dialogText='Write the client name'
+        labelValidate='Update'
+        handleValidate={handleValidateClient}
+        children={
+
+          <TextField
+            value={valueClientChange}
+            onChange={onChangeDialogClient}
+            label='Client Name'
+            placeholder='Write here'
+
+
+          />
+        }
+
+        />
+    }
+
+{/*COMMENTS*/}
+    {valueModalComments &&
+      <ModalComments
+        open={valueModalComments}
+        handleClose={handleCloseComments}
+        titleDialog='Change the comments'
+        dialogText='Write your comments'
+        labelValidate='Update'
+        handleValidate={handleValidateComments}
+        children={
+
+          <TextField
+            value={valueCommentsChange}
+            onChange={onChangeDialogComments}
+            label='Comments'
+            placeholder='Write here'
+            multiline
+            rows={3}
+            variant="outlined"
+            style={{width:500}}
+
+
+          />
+        }
+
+        />
+    }
+
+{/*KICK-OFF*/}
+    {valueModalKO &&
+      <ModalKO
+        open={valueModalKO}
+        handleClose={handleCloseKO}
+        titleDialog='Change the Kick-Off date'
+        dialogText='Pick a date'
+        labelValidate='Update'
+        handleValidate={handleValidateKO}
+        children={
+            <DatePicker
+                labelDatePicker=''
+                valueDatePicker={valueKOChange}
+                onChangeDatePicker={onChangeDialogKO}
+            />
+      }
+
+        />
+    }
 
 
 

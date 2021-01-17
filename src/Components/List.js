@@ -273,7 +273,10 @@ export default function EnhancedTable({
   onClickRoad,
   onClickLOGBudget,
   onClickGate,
-  onClickStatus
+  onClickStatus,
+  onClickClient,
+  onClickComments,
+  onClickKO
 
 }) {
   const classes = useStyles();
@@ -426,19 +429,19 @@ export default function EnhancedTable({
                       <TableCell align="right" onClick={()=>onClickTower(row.project)}>{row.tower}</TableCell>
                       <TableCell align="right" onClick={()=>onClickGeneration(row.project)}>{row.generation}</TableCell>
 
-                      <TableCell align="right">{row.client}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickClient(row.project)}>{row.client}</TableCell>
 
                       <TableCell align="right"  onClick={()=>onClickPriority(row.project)} >{row.priority}</TableCell>
                       <TableCell align="right"  onClick={()=>onClickCountry(row.project)} >{row.country}</TableCell>
                       <TableCell align="right">{moment.unix(row.dateOI).format("MM/DD/YYYY")}</TableCell>
 
-                      <TableCell align="right">{moment.unix(row.dateKO).format("MM/DD/YYYY")}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickKO(row.project,row.dateKO)}>{moment.unix(row.dateKO).format("DD/MM/yyyy")}</TableCell>
                       <TableCell align="right" onClick={()=>onClickTM(row.project)}>{row.tm}</TableCell>
                       <TableCell align="right" onClick={()=>onClickSM(row.project)}>{row.sm}</TableCell>
                       <TableCell align="right" onClick={()=>onClickRoad(row.project)}>{row.roadSurvey}</TableCell>
                       <TableCell align="right" onClick={()=>onClickLOGBudget(row.project)}>{row.logBudget}</TableCell>
                       <TableCell align="right" onClick={()=>onClickGate(row.project)}>{row.gate}</TableCell>
-                      <TableCell align="right" style={{width: 300}}>{row.comments}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickComments(row.project, row.comments)} style={{width: 400}}>{row.comments}</TableCell>
                       <TableCell align="right" onClick={()=>onClickStatus(row.project)}>{row.status}</TableCell>
 
                     </TableRow>
