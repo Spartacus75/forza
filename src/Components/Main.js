@@ -38,6 +38,7 @@ import ModalStatus from '../Assets/DialogForChange/DialogQtty'
 import ModalClient from '../Assets/DialogForChange/DialogQtty'
 import ModalComments from '../Assets/DialogForChange/DialogQtty'
 import ModalKO from '../Assets/DialogForChange/DialogQtty'
+import ModalOI from '../Assets/DialogForChange/DialogQtty'
 import SelectQtty from '../Assets/Select'
 import DatePicker from '../Assets/DatePicker'
 
@@ -103,7 +104,9 @@ const [valueClientChange, setValueClientChange] = useState('')
 const [valueModalComments, setValueModalComments] = useState(false)
 const [valueCommentsChange, setValueCommentsChange] = useState('')
 const [valueModalKO, setValueModalKO] = useState(false)
-const [valueKOChange, setValueKOChange] = useState(moment(Date.now()).format('x'))
+const [valueKOChange, setValueKOChange] = useState(Date.now().parse)
+const [valueModalOI, setValueModalOI] = useState(false)
+const [valueOIChange, setValueOIChange] = useState(Date.now().parse)
 
 const onClickAddProject = () => {
   setOpen(true)
@@ -139,8 +142,8 @@ if (
                 sm: valueSM,
                 client: valueClient,
                 priority: valuePriority,
-                dateOI: valueOrderIntake/*moment(valueOrderIntake).unix()*/,
-                dateKO: valueKO/*moment(valueKO).unix()*/,
+                dateOI: Date.parse(valueOrderIntake)/*moment(valueOrderIntake).unix()*/,
+                dateKO: Date.parse(valueKO)/*moment(valueKO).unix()*/,
                 roadSurvey: valueRS,
                 logBudget: valueLOG,
                 gate: valueGate,
@@ -914,8 +917,7 @@ const handleValidateComments = async (event) => {
 
 const onClickKO = async (event, date) => {
   //alert('on affiche le modal')
-  console.log('date qui vient de firestore', date) //timestamp => OK => on la converti en dates
-  console.log('on convertit le TS en date classique', moment.unix(date).format("D/MM/yyyy"))
+  //console.log('date qui vient de firestore', date) //timestamp => OK => on la converti en dates
   setValueKOChange(date)
 
   setValueModalKO(true)
@@ -933,24 +935,21 @@ const handleCloseKO = () => {
 const onChangeDialogKO = (event) => {
   //console.log('AVANT HEIN!', event)
   //console.log('HEIN!!!! ', moment.unix(event).format("DD/MM/yyyy"))
-  console.log('date brute du picker', event)
-  console.log('date converti en timestamp', moment.unix(event). format('D/MM/yyyy'))
-  setValueKOChange( '17/01/2025'/*moment.unix(event/1000). format('D/MM/yyyy')*/)
+  //console.log('date brute du picker', event)
+  //console.log('date converti en timestamp', moment.unix(event). format('D/MM/yyyy'))
+  setValueKOChange( event/*moment.unix(event/1000). format('D/MM/yyyy')*/)
 }
 
 const handleValidateKO = async (event) => {
   //console.log('ici on va rentrer dans Firestore...')
-  console.log(valueKOChange)
-  console.log('valeur pour firestore', moment(moment(valueKOChange)).format("X"))
-  //ici je sais déjà récupérer la valeur du Qtty mais il me faut le nom du project à trouver comme ref
-  //console.log('dans la procédure',event)
-  //console.log('new qtty', valueQttyChange)
-  //console.log('projet qui va être modifié: ', valueProjectChange )
+  //console.log(valueKOChange)
+  //console.log('valeur pour firestore', Date.parse(valueKOChange), typeof(Date.parse(valueKOChange)))
+
 
   var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
 
   db.update({
-            dateKO:  valueKOChange
+            dateKO:  Date.parse(valueKOChange)
           })
           .then(function() {
             console.log("Document successfully updated!");
@@ -966,6 +965,61 @@ const handleValidateKO = async (event) => {
 
 
 }
+
+//OI
+
+const onClickOI = async (event, date) => {
+  //alert('on affiche le modal')
+  //console.log('date qui vient de firestore', date) //timestamp => OK => on la converti en dates
+  setValueOIChange(date)
+
+  setValueModalOI(true)
+  setValueProjectChange(event)
+  //console.log('project name: ', event)
+  //console.log('date: ', moment.unix(date).format("DD/MM/yyyy"))
+  //console.log('new date: ', valueKOChange)
+  //console.log('convert to timestamp', moment(valueKOChange).format("x"))
+}
+
+const handleCloseOI = () => {
+  setValueModalOI(false)
+}
+
+const onChangeDialogOI = (event) => {
+  //console.log('AVANT HEIN!', event)
+  //console.log('HEIN!!!! ', moment.unix(event).format("DD/MM/yyyy"))
+  //console.log('date brute du picker', event)
+  //console.log('date converti en timestamp', moment.unix(event). format('D/MM/yyyy'))
+  setValueOIChange( event/*moment.unix(event/1000). format('D/MM/yyyy')*/)
+}
+
+const handleValidateOI = async (event) => {
+  //console.log('ici on va rentrer dans Firestore...')
+  //console.log(valueKOChange)
+  //console.log('valeur pour firestore', Date.parse(valueKOChange), typeof(Date.parse(valueKOChange)))
+
+
+  var db = firebase.firestore().collection("Projects").doc(`${valueProjectChange}`)
+
+  db.update({
+            dateOI:  Date.parse(valueOIChange)
+          })
+          .then(function() {
+            console.log("Document successfully updated!");
+            setValueModalOI(false)
+            //setValueKOChange('')
+            })
+          .catch(function(error) {
+            // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+          setValueModalOI(false)
+});
+
+
+
+}
+
+
 
 
 
@@ -1086,6 +1140,7 @@ useEffect(() => {
           onClickClient={(event) => onClickClient(event)}
           onClickComments={(event, comments) => onClickComments(event, comments)}
           onClickKO={(event, date) => onClickKO(event, date)}
+          onClickOI={(event, date) => onClickOI(event, date)}
     />
 
     {currentUser? currentUser.email : 'not loggedin'}
@@ -1516,6 +1571,27 @@ useEffect(() => {
 
         />
     }
+
+{/*ORDER INTAKE*/}
+    {valueModalOI &&
+      <ModalOI
+        open={valueModalOI}
+        handleClose={handleCloseOI}
+        titleDialog='Change the Order Intake date'
+        dialogText='Pick a date'
+        labelValidate='Update'
+        handleValidate={handleValidateOI}
+        children={
+            <DatePicker
+                labelDatePicker=''
+                valueDatePicker={valueOIChange}
+                onChangeDatePicker={onChangeDialogOI}
+            />
+      }
+
+        />
+    }
+
 
 
 

@@ -276,7 +276,8 @@ export default function EnhancedTable({
   onClickStatus,
   onClickClient,
   onClickComments,
-  onClickKO
+  onClickKO,
+  onClickOI
 
 }) {
   const classes = useStyles();
@@ -433,9 +434,9 @@ export default function EnhancedTable({
 
                       <TableCell align="right"  onClick={()=>onClickPriority(row.project)} >{row.priority}</TableCell>
                       <TableCell align="right"  onClick={()=>onClickCountry(row.project)} >{row.country}</TableCell>
-                      <TableCell align="right">{moment.unix(row.dateOI).format("MM/DD/YYYY")}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickOI(row.project,row.dateOI)}>{moment(row.dateOI).format("DD/MM/yyyy")}</TableCell>
 
-                      <TableCell align="right" onClick={()=>onClickKO(row.project,row.dateKO)}>{moment.unix(row.dateKO).format("DD/MM/yyyy")}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickKO(row.project,row.dateKO)}>{moment(row.dateKO).format("DD/MM/yyyy")}</TableCell>
                       <TableCell align="right" onClick={()=>onClickTM(row.project)}>{row.tm}</TableCell>
                       <TableCell align="right" onClick={()=>onClickSM(row.project)}>{row.sm}</TableCell>
                       <TableCell align="right" onClick={()=>onClickRoad(row.project)}>{row.roadSurvey}</TableCell>
