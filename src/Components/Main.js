@@ -1117,12 +1117,15 @@ useEffect(() => {
     <>
 
       <div>MAIN COMPONENT</div>
-    <Filter/>
+
     <AddProjectButton
         label="Add a project"
         onClick={onClickAddProject}
 
     />
+
+    <Filter/>
+
     <List
           tableau={valueFirestore}
           onClickQtty={(event) => onClickQtty(event)}
