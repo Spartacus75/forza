@@ -194,9 +194,10 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected, onClickSelection } = props;
+  const { numSelected, onClickSelection, onClickFilter, children } = props;
 
   return (
+    <>
     <Toolbar
       className={clsx(classes.root, {
         [classes.highlight]: numSelected > 0,
@@ -221,11 +222,15 @@ const EnhancedTableToolbar = (props) => {
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
-            <FilterListIcon />
+            <FilterListIcon onClick={onClickFilter} />
           </IconButton>
         </Tooltip>
       )}
+
     </Toolbar>
+
+    {children}
+    </>
   );
 };
 
@@ -262,6 +267,7 @@ const useStyles = makeStyles((theme) => ({
     //backgroundColor: 'red',
     '&:hover': {
       background: "#FFD29A",
+      borderRadius: '15px'
     }
   },
 }));
@@ -286,7 +292,9 @@ export default function EnhancedTable({
   onClickClient,
   onClickComments,
   onClickKO,
-  onClickOI
+  onClickOI,
+  onClickFilter,
+  children
 
 }) {
   const classes = useStyles();
@@ -390,7 +398,7 @@ export default function EnhancedTable({
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} onClickSelection={onClickSelection} />
+        <EnhancedTableToolbar numSelected={selected.length} onClickSelection={onClickSelection} onClickFilter={onClickFilter} children={children} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -432,7 +440,7 @@ export default function EnhancedTable({
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none" hover className={classes.survolItem}>
+                      <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.project}
                       </TableCell>
                       <TableCell align="right" onClick={()=>onClickQtty(row.project)} hover className={classes.survolItem}>{row.quantity}</TableCell>

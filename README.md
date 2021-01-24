@@ -4,3 +4,4 @@
 - Après s'être assurer que le tri marche correctement, mettre de la mise en page puis attaquer le filtrage (avec le bouton)
 - optional: dashboard
 - indiquer la météo et le classement du foot
+- lorsqu'on filtre une tour qui n'est pas dans le tableau tout apparait. A priori, on devrait ne rien voir apparaitre...

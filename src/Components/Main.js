@@ -22,7 +22,7 @@ import {
 import moment from 'moment'
 import firebase from '../firebase.js'
 import SmallAlert from '../Assets/SmallAlert'
-import {findWithAttr} from '../functions.js'
+import {findWithAttr, filterArray} from '../functions.js'
 import ModalQtty from '../Assets/DialogForChange/DialogQtty'
 import ModalBlade from '../Assets/DialogForChange/DialogQtty'
 import ModalTower from '../Assets/DialogForChange/DialogQtty'
@@ -73,7 +73,26 @@ const [valueGate, setValueGate] = useState('')
 const [valueStatus, setValueStatus] = useState('')
 const [valueComments, setValueComments] = useState('')
 const [valueValidation, setValueValidation] =useState(false)
-const [valueFirestore, setvalueFirestore] = useState([])
+const [valueFirestore, setvalueFirestore] = useState([
+
+{
+  priority: '',
+  blade: '',
+  tower: '',
+  generation:'' ,
+  tm: '',
+  sm:'' ,
+  roadSurvey:'' ,
+  logBudget:'' ,
+  gate:'' ,
+  status:'' ,
+  project: '',
+  client:'' ,
+  country: ''
+
+}
+
+])
 const [valueModalQtty, setValueModalQtty] = useState(false)
 const [valueQttyChange, setValueQttyChange] = useState(1)
 const [valueProjectChange, setValueProjectChange] = useState('')
@@ -107,6 +126,21 @@ const [valueModalKO, setValueModalKO] = useState(false)
 const [valueKOChange, setValueKOChange] = useState(Date.now().parse)
 const [valueModalOI, setValueModalOI] = useState(false)
 const [valueOIChange, setValueOIChange] = useState(Date.now().parse)
+const [valueIsFilter, setValueIsFilter] = useState(false)
+const [valueFilterPriority, setValueFilterPriority] = useState('***')
+const [valueFilterBlade, setValueFilterBlade] = useState('***')
+const [valueFilterTower, setValueFilterTower] = useState('***')
+const [valueFilterGeneration, setValueFilterGeneration] = useState('***')
+const [valueFilterTM, setValueFilterTM] = useState('***')
+const [valueFilterSM, setValueFilterSM] = useState('***')
+const [valueFilterRoadSurvey, setValueFilterRoadSurvey] = useState('***')
+const [valueFilterLOGBudget, setValueFilterLOGBudget] = useState('***')
+const [valueFilterGate, setValueFilterGate] = useState('***')
+const [valueFilterStatus, setValueFilterStatus] = useState('***')
+const [valueFilterProject, setValueFilterProject] = useState('')
+const [valueFilterClient, setValueFilterClient] = useState('')
+const [valueFilterCountry, setValueFilterCountry] = useState('***')
+
 
 const onClickAddProject = () => {
   setOpen(true)
@@ -173,6 +207,22 @@ if (
                 setValueComments('')
                 setValueValidation(false)
                 //setvalueFirestore([...valueFirestore])//ajout ok?
+
+                //ON ENLEVE LES CRITERES DE FILTRE POUR RETROUVER NOTRE projet
+                setValueFilterPriority('***')
+                setValueFilterBlade('***')
+                setValueFilterTower('***')
+                setValueFilterGeneration('***')
+                setValueFilterTM('***')
+                setValueFilterSM('***')
+                setValueFilterRoadSurvey('***')
+                setValueFilterLOGBudget('***')
+                setValueFilterGate('***')
+                setValueFilterStatus('***')
+                setValueFilterProject('')
+                setValueFilterClient('')
+                setValueFilterCountry('***')
+
               })
               .catch(function(error) {
                 console.error("Error writing document: ", error);
@@ -1020,8 +1070,127 @@ const handleValidateOI = async (event) => {
 }
 
 
+//Faire apparaitre Filter
 
+const onClickFilter = () => {
+  setValueIsFilter(!valueIsFilter)
+}
 
+//Filter Priority
+const onChangeFilterPriority = async (event) => {
+  await setValueFilterPriority(event.target.value)
+  //console.log('filtre: ', filterArray(valueFirestore, event.target.value, 'priority'))
+  //console.log(filterArray(valueFirestore, event.target.value))
+  //setvalueFirestore([...valueFirestore, ...filterArray(valueFirestore, event.target.value)])
+
+}
+
+//Filter Blade
+const onChangeFilterBlade = (event) => {
+  setValueFilterBlade(event.target.value)
+
+}
+
+//Filter tower
+const onChangeFilterTower = (event) => {
+  setValueFilterTower(event.target.value)
+
+}
+
+//Filter Generation
+const onChangeFilterGeneration = (event) => {
+  setValueFilterGeneration(event.target.value)
+
+}
+
+//Filter TM
+const onChangeFilterTM = (event) => {
+  setValueFilterTM(event.target.value)
+
+}
+
+//Filter SM
+const onChangeFilterSM = (event) => {
+  setValueFilterSM(event.target.value)
+
+}
+
+//Filter Road Survey
+const onChangeFilterRoadSurvey = (event) => {
+  setValueFilterRoadSurvey(event.target.value)
+
+}
+
+//Filter LOG Budget
+const onChangeFilterLOGBudget = (event) => {
+  setValueFilterLOGBudget(event.target.value)
+
+}
+
+//Filter Gate
+const onChangeFilterGate = (event) => {
+  setValueFilterGate(event.target.value)
+
+}
+
+//Filter Status
+const onChangeFilterStatus = (event) => {
+  setValueFilterStatus(event.target.value)
+  //console.log('resultat' ,filterArray(valueFirestore, event.target.value, 'status'))
+
+}
+
+//Filter PROJECT
+const onChangeFilterProject = (event) => {
+  setValueFilterProject(event.target.value)
+
+}
+
+//Filter CLIENT
+const onChangeFilterClient = (event) => {
+  setValueFilterClient(event.target.value)
+
+}
+
+//Filter COUNTRY
+const onChangeFilterCountry = (event) => {
+  setValueFilterCountry(event.target.value)
+  //alert(event.target.value)
+  //console.log('resultat' ,filterArray(valueFirestore, event.target.value, 'country'))
+}
+
+const onChangeResetFilter = () =>{
+  //alert('ici on remet tout à zéro')
+  setValueFilterPriority('***')
+  setValueFilterBlade('***')
+  setValueFilterTower('***')
+  setValueFilterGeneration('***')
+  setValueFilterTM('***')
+  setValueFilterSM('***')
+  setValueFilterRoadSurvey('***')
+  setValueFilterLOGBudget('***')
+  setValueFilterGate('***')
+  setValueFilterStatus('***')
+  setValueFilterProject('')
+  setValueFilterClient('')
+  setValueFilterCountry('***')
+}
+
+var filterCriteria = {
+  priority: valueFilterPriority,
+  blade: valueFilterBlade,
+  tower: valueFilterTower,
+  generation: valueFilterGeneration,
+  tm: valueFilterTM,
+  sm: valueFilterSM,
+  roadSurvey: valueFilterRoadSurvey,
+  logBudget: valueFilterLOGBudget,
+  gate: valueFilterGate,
+  status: valueFilterStatus,
+  project: valueFilterProject,
+  client: valueFilterClient,
+  country: valueFilterCountry
+}
 
 
 var newProject = {
@@ -1108,7 +1277,7 @@ useEffect(() => {
 
 }, [])
 
-//console.log('firestore Project',valueFirestore)
+console.log( 'liste des critères dans main', filterCriteria)
 
 
 
@@ -1124,10 +1293,9 @@ useEffect(() => {
 
     />
 
-    <Filter/>
 
-    <List
-          tableau={valueFirestore}
+   <List
+          tableau={filterArray(valueFirestore, filterCriteria)}
           onClickQtty={(event) => onClickQtty(event)}
           onClickBlade={(event) => onClickBlade(event)}
           onClickTower={(event) => onClickTower(event)}
@@ -1144,6 +1312,38 @@ useEffect(() => {
           onClickComments={(event, comments) => onClickComments(event, comments)}
           onClickKO={(event, date) => onClickKO(event, date)}
           onClickOI={(event, date) => onClickOI(event, date)}
+          onClickFilter={()=>onClickFilter()}
+          children={valueIsFilter && <Filter
+                                        valueFilterPriority={valueFilterPriority}
+                                        onChangeFilterPriority={onChangeFilterPriority}
+                                        valueFilterBlade={valueFilterBlade}
+                                        onChangeFilterBlade={onChangeFilterBlade}
+                                        valueFilterTower={valueFilterTower}
+                                        onChangeFilterTower={onChangeFilterTower}
+                                        valueFilterGeneration={valueFilterGeneration}
+                                        onChangeFilterGeneration={onChangeFilterGeneration}
+                                        valueFilterTM={valueFilterTM}
+                                        onChangeFilterTM={onChangeFilterTM}
+                                        valueFilterSM={valueFilterSM}
+                                        onChangeFilterSM={onChangeFilterSM}
+                                        valueFilterRoadSurvey={valueFilterRoadSurvey}
+                                        onChangeFilterRoadSurvey={onChangeFilterRoadSurvey}
+                                        valueFilterLOGBudget={valueFilterLOGBudget}
+                                        onChangeFilterLOGBudget={onChangeFilterLOGBudget}
+                                        valueFilterGate={valueFilterGate}
+                                        onChangeFilterGate={onChangeFilterGate}
+                                        valueFilterStatus={valueFilterStatus}
+                                        onChangeFilterStatus={onChangeFilterStatus}
+                                        valueFilterProject={valueFilterProject}
+                                        onChangeFilterProject={onChangeFilterProject}
+                                        valueFilterClient={valueFilterClient}
+                                        onChangeFilterClient={onChangeFilterClient}
+                                        valueFilterCountry={valueFilterCountry}
+                                        onChangeFilterCountry={onChangeFilterCountry}
+                                        onClickResetFilter={onChangeResetFilter}
+
+
+            />}
     />
 
     {currentUser? currentUser.email : 'not loggedin'}

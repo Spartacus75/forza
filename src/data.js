@@ -1,4 +1,5 @@
 export const countries = [
+  {id:0 , name:'***'},
   {id:1 , name:'Belgium'},
   {id:2 , name:'Croatia'},
   {id:3 , name:'France'},
@@ -9,6 +10,7 @@ export const countries = [
 ]
 
 export const dataQtty =[
+  {id:0 , name:'***'},
   {id:1 , name:1},
   {id:2 , name:2},
   {id:3 , name:3},
@@ -42,12 +44,14 @@ export const dataQtty =[
 ]
 
  export const dataGeneration = [
+   {id:0 , name:'***'},
    {id:1, name: 'Delta'},
    {id:2, name: 'Delta 4000'}
 
  ]
 
  export const dataBlades = [
+   {id:0 , name:'***'},
    {id:1, name: 'N117'},
    {id:2, name: 'N131'},
    {id:3, name: 'N133'},
@@ -57,6 +61,7 @@ export const dataQtty =[
  ]
 
  export const dataTowers = [
+   {id:0 , name:'***'},
    {id:1, name: 'TS78'},
    {id:2, name: 'TS84'},
    {id:3, name: 'TS90'},
@@ -75,34 +80,40 @@ export const dataQtty =[
  ]
 
  export const dataTM = [
+   {id:0 , name:'***'},
    {id:1, name: 'H. Del Fabbro'},
    {id:2, name: 'M. Seduk'}
  ]
 
  export const dataSM = [
+   {id:0 , name:'***'},
    {id:1, name: 'G. Celiberti'},
    {id:2, name: 'P. Lappas'}
  ]
 
  export const dataPriorities = [
+   {id:0 , name:'***'},
    {id:1, name: 'Low'},
    {id:2, name: 'Medium'},
    {id:3, name: 'High'}
  ]
 
  export const dataRoadSurvey = [
+   {id:0 , name:'***'},
    {id:1, name: 'Done'},
    {id:2, name: 'Not done, to be done'},
    {id:3, name: 'Not done, maybe later'}
  ]
 
  export const dataLOGBudget = [
+   {id:0 , name:'***'},
    {id:1, name: 'Done'},
    {id:2, name: 'Not done, to be done'},
    {id:3, name: 'Not done, maybe later'}
  ]
 
  export const dataGate = [
+   {id:0 , name:'***'},
    {id:1, name: 'Unknown'},
    {id:2, name: 'Gate 2'},
    {id:3, name: 'Gate 3'},
@@ -110,6 +121,7 @@ export const dataQtty =[
  ]
 
  export const tenderStatus = [
+   {id:0 , name:'***'},
    {id:1, name: 'Open'},
    {id:2, name: 'Closed'},
    {id:3, name: 'Lost'},
