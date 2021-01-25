@@ -30,12 +30,14 @@ export function filterArray(array, criteria){
 
                   if (tableauTemp?.length >0){
                   tableauTemp = tableauTemp.filter(item => item[key] == criteria[key])
+                  console.log('filtre A1')
                   }
 
                   if (!tableauTemp){
                   tableauTemp = tableauFiltre.filter(item => item[key] == criteria[key])
                   //counter = counter + 1
                   //console.log('initiation A')
+                  console.log('filtre A2')
                   }
 
                   //console.log('tableau avec un filtre A ', tableauTemp)
@@ -44,7 +46,7 @@ export function filterArray(array, criteria){
                   //console.log('tableauTemp dans le else', tableauTemp)
                   if (tableauTemp?.length >0){
                     //var tableauTemp = tableauFiltre
-                    //console.log('on garde le même tableau')
+                    console.log('on garde le même tableau')
                   } else {
                     tableauTemp = tableauFiltre
                     //console.log('pour debug')

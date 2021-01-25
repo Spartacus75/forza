@@ -20,6 +20,7 @@ import {
 import {AuthProvider} from "./Context/AuthContext"
 //import PrivateRoute from './Assets/PrivateRoute'
 import firebase from './firebase.js'
+import PrivateRoute from './Assets/PrivateRoute'
 
 function App() {
 
@@ -32,13 +33,13 @@ console.log('firebase', firebase)
 
   <AuthProvider>
 
-      <Router>
+      <Router basename="/projectreview">
 
         <MyAppBar/>
 
         <Switch>
               <Route exact path="/" component={Login}/>
-              <Route path="/main" component={Main}/>
+              <PrivateRoute path="/main" component={Main}/>
               <Route path="/forgotpassword" component={ForgotPassword}/>
 {/*              <Route path="/services" component={Services}/>
               <Route path="/signin" component={SignIn}/>

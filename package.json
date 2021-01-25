@@ -1,6 +1,7 @@
 {
   "name": "forza",
   "version": "0.1.0",
+  "homepage": "https://www.maanan.xyz/projectreview",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",

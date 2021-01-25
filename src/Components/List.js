@@ -102,7 +102,7 @@ const headCells = [
   { id: 'logBudget', numeric: true, disablePadding: false, label: 'LOG Budget?' },
   { id: 'gateStatus', numeric: true, disablePadding: false, label: 'Gate' },
   { id: 'comments', numeric: true, disablePadding: false, label: 'Comments' },
-  { id: 'status', numeric: true, disablePadding: false, label: 'Status' },
+  { id: 'status', numeric: true, disablePadding: false, label: 'Status' }
 
 ];
 
@@ -111,7 +111,8 @@ const headCells = [
 function EnhancedTableHead(props) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
-    console.log(event, property)
+    //console.log('colonne ', property, ' clicked')
+    //console.log(event, property)
     onRequestSort(event, property);
 
   };

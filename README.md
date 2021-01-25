@@ -1,7 +1,13 @@
 - filtre des dates à régler
 - génération d'un email après réunion
-- Possibilité d'export
-- Après s'être assurer que le tri marche correctement, mettre de la mise en page puis attaquer le filtrage (avec le bouton)
+- Possibilité d'export vers Excel
+- Après s'être assurer que le tri marche correctement
 - optional: dashboard
 - indiquer la météo et le classement du foot
 - lorsqu'on filtre une tour qui n'est pas dans le tableau tout apparait. A priori, on devrait ne rien voir apparaitre...
+- Filtre des textfield... pas toujours évident...-case, champ pas complet...
+- When updating the value, the old value should be the one to appear (similarly than comment field)
+- Tri toujours pas fonctionnel...
+- Retravailler le logo
+- Ajouter un chart (réfléchir à ce qu'on montre et où)
+- Private route toujours pas ajouté
