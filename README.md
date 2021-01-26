@@ -10,4 +10,3 @@
 - Tri toujours pas fonctionnel...
 - Retravailler le logo
 - Ajouter un chart (réfléchir à ce qu'on montre et où)
-- Private route toujours pas ajouté

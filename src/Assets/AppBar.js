@@ -23,11 +23,42 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 0.25,
   },
+  agencement:{
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  meteo:{
+    display:'flex',
+    flexDirection: 'column',
+    padding: '10px'
+    //gridTemplateColumns: 'auto auto auto auto auto auto auto auto',
+    //gridColumnGap: '5px',
+    //gridRowGap: '5px',
+    //backgroundColor: 'red'
+  },
+  gridItem:  {
+    display: 'grid',
+    gridTemplateColumns: 'auto auto auto auto',
+    gridColumnGap: '25px',
+
+    //gridRowGap: '10px'
+  //backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  //border: '1px solid rgba(0, 0, 0, 0.8)',
+  //padding: '20px',
+  //fontSize: '14px',
+  //textAlign: 'center'
+},
+truc: {
+  width:80,
+  display: 'flex',
+  alignItems: 'center'
+}
+
 }));
 
-export default function MenuAppBar() {
+export default function MenuAppBar({meteo}) {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -57,11 +88,42 @@ export default function MenuAppBar() {
   return (
     <div className={classes.root}>
 
-      <AppBar position="fixed">
-        <Toolbar>
+      <AppBar position="static">
+        <Toolbar className={classes.agencement}>
           <Typography variant="h6" className={classes.title}>
             <img src={logo} alt="LOGO"/>
           </Typography>
+
+          <div className={classes.meteo}>{
+
+            meteo?.length >0 ?
+
+            meteo.map(item =>
+              <>
+              <div className={classes.gridItem}>
+                        <p className={classes.truc}>{item.city}</p>
+                        <p  className={classes.truc}>{item.temp} °C</p>
+                        <p className={classes.truc}>{item.wind} m/s</p>
+                        <img
+                            src={`http://openweathermap.org/img/wn/${item.weather}@2x.png`}
+                              alt={item.weather}
+                              style={{width: 50}}
+                              />
+              </div>
+              </>
+            )
+
+
+
+
+            : 'no'
+
+
+
+
+          }</div>
+
+
           {!auth && (
             <div>
               <IconButton
