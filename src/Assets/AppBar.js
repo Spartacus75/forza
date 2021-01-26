@@ -14,6 +14,7 @@ import Menu from '@material-ui/core/Menu';
 import logo from '../Images/Logo.png'
 import {useAuth} from '../Context/AuthContext'
 import {useHistory} from 'react-router-dom'
+import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,6 +95,8 @@ export default function MenuAppBar({meteo}) {
             <img src={logo} alt="LOGO"/>
           </Typography>
 
+
+<Hidden smDown>
           <div className={classes.meteo}>{
 
             meteo?.length >0 ?
@@ -101,7 +104,7 @@ export default function MenuAppBar({meteo}) {
             meteo.map(item =>
               <>
               <div className={classes.gridItem}>
-                        <p className={classes.truc}>{item.city}</p>
+                        <p className={classes.truc}>{item.city== 'Donji grad' ? 'Zagreb' : item.city}</p>
                         <p  className={classes.truc}>{item.temp} °C</p>
                         <p className={classes.truc}>{item.wind} m/s</p>
                         <img
@@ -122,7 +125,7 @@ export default function MenuAppBar({meteo}) {
 
 
           }</div>
-
+</Hidden>
 
           {!auth && (
             <div>
