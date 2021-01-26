@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,6 +15,8 @@ import logo from '../Images/Logo.png'
 import {useAuth} from '../Context/AuthContext'
 import {useHistory} from 'react-router-dom'
 import Hidden from '@material-ui/core/Hidden';
+import { CSVLink, CSVDownload } from "react-csv";
+import firebase from '../firebase.js'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,8 +64,10 @@ truc: {
 export default function MenuAppBar({meteo}) {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
+  const [data, setData] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const {login, currentUser} = useAuth()
 
   const {logout} = useAuth()
   const history = useHistory()
@@ -85,6 +89,40 @@ export default function MenuAppBar({meteo}) {
     history.push('/')
   }
 
+  const handleExport = async () => {
+    console.log('export data')
+  }
+
+useEffect(() => {
+
+  var projects = []
+
+  async function fetchData() {
+
+  await firebase.firestore().collection("Projects")
+      .get()
+      .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              // doc.data() is never undefined for query doc snapshots
+              //console.log(doc.id, " => ", doc.data());
+              projects.push(doc.data())
+          });
+      })
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });
+
+
+  //console.log('new fetch', projects)
+  setData(projects)
+}
+
+  fetchData()
+
+
+},[])
+
+console.log(data)
 
   return (
     <div className={classes.root}>
@@ -127,7 +165,7 @@ export default function MenuAppBar({meteo}) {
           }</div>
 </Hidden>
 
-          {!auth && (
+          {currentUser && (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -153,6 +191,17 @@ export default function MenuAppBar({meteo}) {
                 open={open}
                 onClose={handleClose}
               >
+
+                <CSVLink
+                    data={data}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'black',
+                      margin: '10px',
+                      textAlign: 'left',
+                      fontFamily: "Roboto, Helvetica Arial, sans-serif"
+                    }}
+                    >Download data</CSVLink>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
 
               </Menu>
