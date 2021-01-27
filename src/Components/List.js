@@ -135,6 +135,8 @@ function EnhancedTableHead(props) {
           />
         </TableCell>
         {headCells.map((headCell) => (
+
+
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
@@ -155,6 +157,8 @@ function EnhancedTableHead(props) {
               ) : null}
             </TableSortLabel>
           </TableCell>
+
+
         ))}
       </TableRow>
     </TableHead>
@@ -444,25 +448,25 @@ export default function EnhancedTable({
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.project}
                       </TableCell>
-                      <TableCell align="right" onClick={()=>onClickQtty(row.project)} hover className={classes.survolItem}>{row.quantity}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickBlade(row.project)} hover className={classes.survolItem}>{row.blade}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickTower(row.project)} hover className={classes.survolItem}>{row.tower}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickGeneration(row.project)} hover className={classes.survolItem}>{row.generation}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickQtty(row.project, row.quantity)} hover className={classes.survolItem}>{row.quantity}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickBlade(row.project, row.blade)} hover className={classes.survolItem}>{row.blade}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickTower(row.project, row.tower)} hover className={classes.survolItem}>{row.tower}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickGeneration(row.project, row.generation)} hover className={classes.survolItem}>{row.generation}</TableCell>
 
-                      <TableCell align="right" onClick={()=>onClickClient(row.project)} hover className={classes.survolItem}>{row.client}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickClient(row.project, row.client)} hover className={classes.survolItem}>{row.client}</TableCell>
 
-                      <TableCell align="right"  onClick={()=>onClickPriority(row.project)} hover className={classes.survolItem} >{row.priority}</TableCell>
-                      <TableCell align="right"  onClick={()=>onClickCountry(row.project)} hover className={classes.survolItem} >{row.country}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickPriority(row.project, row.priority)} hover className={classes.survolItem} >{row.priority}</TableCell>
+                      <TableCell align="right"  onClick={()=>onClickCountry(row.project, row.country)} hover className={classes.survolItem} >{row.country}</TableCell>
                       <TableCell align="right" onClick={()=>onClickOI(row.project,row.dateOI)} hover className={classes.survolItem}>{moment(row.dateOI).format("DD/MM/yyyy")}</TableCell>
 
                       <TableCell align="right" onClick={()=>onClickKO(row.project,row.dateKO)} hover className={classes.survolItem}>{moment(row.dateKO).format("DD/MM/yyyy")}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickTM(row.project)} hover className={classes.survolItem}>{row.tm}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickSM(row.project)} hover className={classes.survolItem}>{row.sm}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickRoad(row.project)} hover className={classes.survolItem}>{row.roadSurvey}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickLOGBudget(row.project)} hover className={classes.survolItem}>{row.logBudget}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickGate(row.project)} hover className={classes.survolItem}>{row.gate}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickTM(row.project, row.tm)} hover className={classes.survolItem}>{row.tm}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickSM(row.project, row.sm)} hover className={classes.survolItem}>{row.sm}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickRoad(row.project, row.roadSurvey)} hover className={classes.survolItem}>{row.roadSurvey}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickLOGBudget(row.project, row.logBudget)} hover className={classes.survolItem}>{row.logBudget}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickGate(row.project, row.gate)} hover className={classes.survolItem}>{row.gate}</TableCell>
                       <TableCell align="right" onClick={()=>onClickComments(row.project, row.comments)} style={{width: 400}} hover className={classes.survolItem}>{row.comments}</TableCell>
-                      <TableCell align="right" onClick={()=>onClickStatus(row.project)} hover className={classes.survolItem}>{row.status}</TableCell>
+                      <TableCell align="right" onClick={()=>onClickStatus(row.project, row.status)} hover className={classes.survolItem}>{row.status}</TableCell>
 
                     </TableRow>
                   );

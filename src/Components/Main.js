@@ -324,11 +324,12 @@ const onClickValidation = () => {
 }
 
 //QTTY
-const onClickQtty = (event) => {
+const onClickQtty = (event, quantity) => {
   //alert('on affiche le modal')
+  setValueQttyChange(quantity)
   setValueModalQtty(true)
   setValueProjectChange(event)
-  console.log('project name: ', event)
+  //console.log('project name: ', event)
 
 }
 
@@ -369,11 +370,12 @@ const handleValidateQtty = async (event) => {
 
 //BLADES
 
-const onClickBlade = (event) => {
+const onClickBlade = (event, blade) => {
   //alert('on affiche le modal')
+  setValueBladeChange(blade)
   setValueModalBlade(true)
   setValueProjectChange(event)
-  console.log('project name: ', event)
+  //console.log('project name: ', event)
 
 }
 
@@ -414,11 +416,12 @@ const handleValidateBlade = async (event) => {
 
 //TOWERS
 
-const onClickTower = (event) => {
+const onClickTower = (event, tower) => {
   //alert('on affiche le modal')
+  setValueTowerChange(tower)
   setValueModalTower(true)
   setValueProjectChange(event)
-  console.log('project name: ', event)
+  //console.log('project name: ', event)
 
 }
 
@@ -459,8 +462,9 @@ const handleValidateTower = async (event) => {
 
 //GENERATIONS
 
-const onClickGeneration = (event) => {
+const onClickGeneration = (event, generation) => {
   //alert('on affiche le modal')
+  setValueGenerationChange(generation)
   setValueModalGeneration(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -505,8 +509,9 @@ const handleValidateGeneration = async (event) => {
 
 //PRIORITY
 
-const onClickPriority = (event) => {
+const onClickPriority = (event, priority) => {
   //alert('on affiche le modal')
+  setValuePriorityChange(priority)
   setValueModalPriority(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -551,8 +556,9 @@ const handleValidatePriority = async (event) => {
 //COUNTRY
 
 
-const onClickCountry = (event) => {
+const onClickCountry = (event, country) => {
   //alert('on affiche le modal')
+  setValueCountryChange(country)
   setValueModalCountry(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -597,8 +603,9 @@ const handleValidateCountry = async (event) => {
 //TM
 
 
-const onClickTM = (event) => {
+const onClickTM = (event, tm) => {
   //alert('on affiche le modal')
+  setValueTMChange(tm)
   setValueModalTM(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -644,8 +651,9 @@ const handleValidateTM = async (event) => {
 //SM
 
 
-const onClickSM = (event) => {
+const onClickSM = (event, sm) => {
   //alert('on affiche le modal')
+  setValueSMChange(sm)
   setValueModalSM(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -689,8 +697,9 @@ const handleValidateSM = async (event) => {
 
 //ROAD
 
-const onClickRoad = (event) => {
+const onClickRoad = (event, roadSurvey) => {
   //alert('on affiche le modal')
+  setValueRoadChange(roadSurvey)
   setValueModalRoad(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -734,8 +743,9 @@ const handleValidateRoad = async (event) => {
 
 //LOG Budget
 
-const onClickLOGBudget = (event) => {
+const onClickLOGBudget = (event, logBudget) => {
   //alert('on affiche le modal')
+  setValueLOGBudgetChange(logBudget)
   setValueModalLOGBudget(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -779,11 +789,12 @@ const handleValidateLOGBudget = async (event) => {
 
 //GATE
 
-const onClickGate = (event) => {
+const onClickGate = (event, gate) => {
   //alert('on affiche le modal')
+  setValueGateChange(gate)
   setValueModalGate(true)
   setValueProjectChange(event)
-  console.log('project name: ', event)
+  //console.log('project name: ', event)
 
 }
 
@@ -824,11 +835,12 @@ const handleValidateGate = async (event) => {
 
 //STATUS
 
-const onClickStatus = (event) => {
+const onClickStatus = (event, status) => {
   //alert('on affiche le modal')
+  setValueStatusChange(status)
   setValueModalStatus(true)
   setValueProjectChange(event)
-  console.log('project name: ', event)
+  console.log('project name!!!!!!!!!!!!!!: ', status)
 
 }
 
@@ -869,8 +881,9 @@ const handleValidateStatus = async (event) => {
 
 //CLIENT
 
-const onClickClient = (event) => {
+const onClickClient = (event, client) => {
   //alert('on affiche le modal')
+  setValueClientChange(client)
   setValueModalClient(true)
   setValueProjectChange(event)
   console.log('project name: ', event)
@@ -1296,19 +1309,19 @@ console.log( 'liste des critères dans main', filterCriteria)
 
    <List
           tableau={filterArray(valueFirestore, filterCriteria)}
-          onClickQtty={(event) => onClickQtty(event)}
-          onClickBlade={(event) => onClickBlade(event)}
-          onClickTower={(event) => onClickTower(event)}
-          onClickGeneration={(event) => onClickGeneration(event)}
-          onClickPriority={(event) => onClickPriority(event)}
-          onClickCountry={(event) => onClickCountry(event)}
-          onClickTM={(event) => onClickTM(event)}
-          onClickSM={(event) => onClickSM(event)}
-          onClickRoad={(event) => onClickRoad(event)}
-          onClickLOGBudget={(event) => onClickLOGBudget(event)}
-          onClickGate={(event) => onClickGate(event)}
-          onClickStatus={(event) => onClickStatus(event)}
-          onClickClient={(event) => onClickClient(event)}
+          onClickQtty={(event, quantity) => onClickQtty(event, quantity)}
+          onClickBlade={(event, blade) => onClickBlade(event, blade)}
+          onClickTower={(event, tower) => onClickTower(event, tower)}
+          onClickGeneration={(event, generation) => onClickGeneration(event, generation)}
+          onClickPriority={(event, priority) => onClickPriority(event, priority)}
+          onClickCountry={(event, country) => onClickCountry(event, country)}
+          onClickTM={(event, tm) => onClickTM(event, tm)}
+          onClickSM={(event, sm) => onClickSM(event, sm)}
+          onClickRoad={(event, roadSurvey) => onClickRoad(event, roadSurvey)}
+          onClickLOGBudget={(event, logBudget) => onClickLOGBudget(event, logBudget)}
+          onClickGate={(event, gate) => onClickGate(event, gate)}
+          onClickStatus={(event, status) => onClickStatus(event, status)}
+          onClickClient={(event, client) => onClickClient(event, client)}
           onClickComments={(event, comments) => onClickComments(event, comments)}
           onClickKO={(event, date) => onClickKO(event, date)}
           onClickOI={(event, date) => onClickOI(event, date)}
@@ -1694,7 +1707,7 @@ console.log( 'liste des critères dans main', filterCriteria)
         children={
           <SelectQtty
               label='Project Status'
-              value={valueProjectChange}
+              value={valueStatusChange}
               onChange={onChangeDialogStatus}
               data={tenderStatus}
           />
