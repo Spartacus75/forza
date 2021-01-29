@@ -89,6 +89,11 @@ export default function MenuAppBar({meteo}) {
     history.push('/')
   }
 
+  const handleDashboard = async () => {
+    history.push('/dashboard')
+  }
+
+
   const handleExport = async () => {
     console.log('export data')
   }
@@ -202,6 +207,7 @@ console.log(data)
                       fontFamily: "Roboto, Helvetica Arial, sans-serif"
                     }}
                     >Download data</CSVLink>
+                <MenuItem onClick={handleDashboard}>Dashboard</MenuItem>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
 
               </Menu>

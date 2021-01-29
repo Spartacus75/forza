@@ -9,6 +9,7 @@ import MyAppBar from'./Components/MyAppBar'
 //import ForgotPassword from './Components/ForgotPassword'
 import Login from './Components/Login'
 import Main from './Components/Main'
+import Dashboard from './Components/Dashboard'
 import ForgotPassword from './Components/ForgotPassword'
 import {
   BrowserRouter as Router,
@@ -40,6 +41,7 @@ console.log('firebase', firebase)
         <Switch>
               <Route exact path="/" component={Login}/>
               <PrivateRoute path="/main" component={Main}/>
+              <PrivateRoute path="/dashboard" component={Dashboard}/>
               <Route path="/forgotpassword" component={ForgotPassword}/>
 {/*              <Route path="/services" component={Services}/>
               <Route path="/signin" component={SignIn}/>
